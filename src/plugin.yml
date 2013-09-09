@@ -1,0 +1,7 @@
+name: TNTPotato
+author: OcelotcR
+description: The Hot Potato gamemode!
+main: HotPotato.Main
+version: 0.4
+commands:
+  texturepack:
