@@ -23,6 +23,7 @@ public class LaunchPad implements Listener{
                 player.setVelocity(new Vector(player.getVelocity().getX(), 1.0D, player.getVelocity().getZ()));
                 player.playSound(player.getLocation(), Sound.CREEPER_HISS, 10, 0);
                 player.playEffect(player.getLocation(), Effect.SMOKE, 5);
+                player.sendMessage("dallas is fag");
             }
         }
     
