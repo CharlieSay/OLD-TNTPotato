@@ -120,7 +120,6 @@ public class Countdowns
         Countdowns.explosioncountdowntimer -= 1;
         Player[] players = Bukkit.getServer().getOnlinePlayers();
         for (Player p : players) {
-          p.setLevel(Countdowns.explosioncountdowntimer);
           p.setFoodLevel(20);
           ScoreboardManager.explosioncountdown.setScore(explosioncountdowntimer);
         }
@@ -138,21 +137,39 @@ public class Countdowns
                   times = times - 1;
                       Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
                       FireworkMeta fm = fw.getFireworkMeta();
+                      Color colour1 = null;
+                      Color colour2 = null;
                       Random x = new Random();
                       int xf = x.nextInt(4) + 1;
                       FireworkEffect.Type type = FireworkEffect.Type.BALL;
                       if (xf == 1) type = FireworkEffect.Type.BALL;
                       if (xf == 2) type = FireworkEffect.Type.BALL_LARGE;
                       if (xf == 3) type = FireworkEffect.Type.BURST;
-                      if (xf == 4) type = FireworkEffect.Type.CREEPER;
+                      if (xf == 4) type = FireworkEffect.Type.STAR;
                       if (xf == 5) type = FireworkEffect.Type.STAR;
-                      FireworkEffect effect = FireworkEffect.builder().flicker(x.nextBoolean()).withColor(Color.AQUA).withFade(Color.BLACK).with(type).trail(x.nextBoolean()).build();
+                      Random c = new Random(); 
+                      int Color1 = c.nextInt(5) + 1;
+                      if (Color1 == 1) colour1 = Color.AQUA;
+                      else if(Color1 == 2) colour1 = Color.RED;
+                      else if(Color1 == 3) colour1 = Color.GREEN;
+                      else if(Color1 == 4) colour1 = Color.BLACK;
+                      else if(Color1 == 5) colour1 = Color.WHITE;
+                      else if(Color1 == 6) colour1 = Color.FUCHSIA;
+                      Random d = new Random(); 
+                      int Color2 = d.nextInt(5) + 1;
+                      if (Color2 == 1) colour2 = Color.AQUA;
+                      else if(Color2 == 2) colour2 = Color.RED;
+                      else if(Color2 == 3) colour2 = Color.GREEN;
+                      else if(Color2 == 4) colour2 = Color.BLACK;
+                      else if(Color2 == 5) colour2 = Color.WHITE;
+                      else if(Color2 == 6) colour2 = Color.FUCHSIA;
+                      FireworkEffect effect = FireworkEffect.builder().flicker(x.nextBoolean()).withColor(colour1).withFade(colour2).with(type).trail(x.nextBoolean()).build();
                       fm.addEffect(effect);
                       int pw = x.nextInt(2) + 1;
                       fm.setPower(pw);
                       fw.setFireworkMeta(fm); 
                       if (times == 0){
-                          
+                          Bukkit.getScheduler().cancelTask(fireworks);
                       }
               }
           
