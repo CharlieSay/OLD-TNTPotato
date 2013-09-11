@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -27,6 +32,7 @@ public class Countdowns
   public static int cooldown;
   public static int lobbytask;
   public static int gametask;
+  public static int fireworks;
   public static int battytask;
 
   public static void lobbycountdown()
@@ -74,7 +80,7 @@ public class Countdowns
         Player[] players = Bukkit.getServer().getOnlinePlayers();
         Bukkit.broadcastMessage(Main.gamename + " " + Countdowns.gamecountdown + " seconds left.");
         for (Player p : players) {
-          p.setFoodLevel(20);
+        //  p.setFoodLevel(20);
           p.playSound(p.getLocation(), Sound.ORB_PICKUP, 0.0F, 20.0F);
         }
         if (Countdowns.gamecountdown == 0) {
@@ -120,18 +126,49 @@ public class Countdowns
         }
         if (Countdowns.explosioncountdowntimer == 0) {
           Main.playingplayers.remove(ename);
-          Main.TNTHolder.remove(ename);
           Main.DeadPlayers.add(ename);
           Main.playingplayers.remove(ename);
+          String name = Main.TNTHolder.get(0);
+          final Player p = Bukkit.getPlayer(name);
+          
+          fireworks = Bukkit.getScheduler().scheduleSyncRepeatingTask((Main.instance), new Runnable(){
+          int times = 3;
+              @Override
+              public void run(){
+                  times = times - 1;
+                      Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+                      FireworkMeta fm = fw.getFireworkMeta();
+                      Random x = new Random();
+                      int xf = x.nextInt(4) + 1;
+                      FireworkEffect.Type type = FireworkEffect.Type.BALL;
+                      if (xf == 1) type = FireworkEffect.Type.BALL;
+                      if (xf == 2) type = FireworkEffect.Type.BALL_LARGE;
+                      if (xf == 3) type = FireworkEffect.Type.BURST;
+                      if (xf == 4) type = FireworkEffect.Type.CREEPER;
+                      if (xf == 5) type = FireworkEffect.Type.STAR;
+                      FireworkEffect effect = FireworkEffect.builder().flicker(x.nextBoolean()).withColor(Color.AQUA).withFade(Color.BLACK).with(type).trail(x.nextBoolean()).build();
+                      fm.addEffect(effect);
+                      int pw = x.nextInt(2) + 1;
+                      fm.setPower(pw);
+                      fw.setFireworkMeta(fm); 
+                      if (times == 0){
+                          
+                      }
+              }
+          
+          }, 0L, 20L);
+          
+
+          
+          Main.TNTHolder.remove(ename);
           Player[] players1 = Bukkit.getServer().getOnlinePlayers();
-          for (Player p : players1) {
-            p.playSound(p.getLocation(), Sound.EXPLODE, 20.0F, 0.0F);
+          for (Player pA : players1) {
+            pA.playSound(pA.getLocation(), Sound.EXPLODE, 20.0F, 0.0F);
           }
 
             e.getInventory().clear();
             e.setHealth(0.0D);
             Bukkit.broadcastMessage(Main.gamename + " BOOM Another one bites the dust");
-
             Random ran = new Random();
             String TNTHoldername = Main.playingplayers.get(ran.nextInt(Main.playingplayers.size()));
             Player TNTHolder = Bukkit.getPlayer(TNTHoldername);
@@ -145,7 +182,7 @@ public class Countdowns
             TNTHolder.getInventory().setHelmet(Headtnt);
             TNTHolder.getInventory().setItem(0, TNT);
             ///////////////////////////////////////////////////////////////////////////////////////////////
-            Bukkit.broadcastMessage(Main.gamename + " The new potato is " + TNTHoldername + " run away!");
+            Bukkit.broadcastMessage(Main.gamename + " The new potato is " + ChatColor.GOLD +  TNTHoldername + " run away!");
             TNTHolder.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
             Bukkit.getScheduler().cancelTask(Countdowns.explosionname);
             ScoreboardManager.maxplayers.setScore(Main.playingplayers.size());
