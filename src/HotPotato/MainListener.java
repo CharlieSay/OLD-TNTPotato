@@ -196,7 +196,7 @@ public class MainListener
 
   @EventHandler
   public void onPing(ServerListPingEvent event) {
-      event.setMotd(ChatColor.RED + "[The Kernel Network]" + ChatColor.AQUA + ":" + "HotPotato UK-2" + ChatColor.RESET + ChatColor.GREEN + "                     <<-- Join for Hot Potato!");
+      event.setMotd(ChatColor.RED + "HotPotato UK-2" + ChatColor.RESET + ChatColor.GREEN + "                                                    <<-- Join for Hot Potato!");
   }  
   
   
