@@ -34,6 +34,7 @@ public class Countdowns {
     public static int gametask;
     public static int fireworks;
     public static int battytask;
+    public static int poweruptask;
 
     public static void lobbycountdown() {
         lobbytask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, new Runnable() {
@@ -50,12 +51,12 @@ public class Countdowns {
                     for (Player p : players) {
                         p.playSound(p.getLocation(), Sound.CLICK, 20.0F, 0.0F);
                     }
-//         if (Main.playingplayers.size() < 3){
-//              Bukkit.getScheduler().cancelTask(Countdowns.lobbytask);
-//              Bukkit.broadcastMessage(Main.gamename + "There was not enough people to start the game! Timer restarted!");
-//              lobbycountdown = 35;
-//              Countdowns.lobbycountdown();
-//          }
+         if (Main.playingplayers.size() < 3){
+              Bukkit.getScheduler().cancelTask(Countdowns.lobbytask);
+              Bukkit.broadcastMessage(Main.gamename + "There was not enough people to start the game! Timer restarted!");
+              lobbycountdown = 35;
+              Countdowns.lobbycountdown();
+          }
                 }
                 if (Countdowns.lobbycountdown == 0) {
                     Countdowns.gamecountdown();
@@ -64,7 +65,19 @@ public class Countdowns {
             }
         }, 0L, 20L);
     }
-
+//
+//    public static void powerups(){
+//        poweruptask = Bukkit.getScheduler().scheduleSyncRepeatingTask((Main.instance), new Runnable(){
+//            
+//            @Override
+//            public void run(){
+//                
+//            }
+//            
+//        }, 0L, 20L);
+//         
+//    }
+//    
     public static void gamecountdown() {
         gametask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, new Runnable() {
             @Override

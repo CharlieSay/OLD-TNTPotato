@@ -68,6 +68,7 @@ public class TNTTransfer
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
                 victim.playSound(victim.getLocation(), Sound.FUSE, 10, 0);
                 Bukkit.broadcastMessage(Main.gamename + " " + victimname + " is now the TNT! Run from them");
+                Countdowns.gamecountdown = Countdowns.gamecountdown + 5;
                 victim.getInventory().setItem(0, TNT);
                 victim.getInventory().setHelmet(Headtnt);
             } else {
