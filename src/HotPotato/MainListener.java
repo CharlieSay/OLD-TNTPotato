@@ -35,11 +35,7 @@ public class MainListener
     @EventHandler
     public void playerjoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (Main.mapNumber == 1) {
-            SpawnPoint.SchoolMap(p);
-        } else if (Main.mapNumber == -1) {
-            SpawnPoint.ToyBox(p);
-        }
+        p.teleport(Main.Spawn);
         String pname = e.getPlayer().getName();
         p.setLevel(0);
         Main.playingplayers.add(pname);
@@ -132,11 +128,7 @@ public class MainListener
     public void playerrespawn(PlayerRespawnEvent e) {
         Player p = e.getPlayer();
         if (Countdowns.lobbycountdown == 0) {
-            if (Main.mapNumber == 1) {
-                SpawnPoint.SchoolMap(p);
-            } else if (Main.mapNumber == -1) {
-                SpawnPoint.ToyBox(p);
-            }            
+            p.teleport(Main.ChosenMap.getSpawn());
             p.sendMessage(Main.gamename + " unlucky on dying! Spectate the game now!");
             for (Player hide : Bukkit.getOnlinePlayers()) {
                 hide.hidePlayer(p);
