@@ -26,7 +26,6 @@ public class ScoreboardManager extends JavaPlugin implements Listener{
         objective.setDisplayName("Stats");
         seconds = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Lobby Timer:")); //Get a fake offline player
         maxplayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Alive Players:"));
-        explosioncountdown = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Explosion:"));
     }
 
 }
