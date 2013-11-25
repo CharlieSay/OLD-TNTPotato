@@ -9,7 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import uk.co.shadycast.shadycontroller.Objects.SStatus;
+import uk.co.shadycast.shadycontroller.ShadyController;
 
 public class Main extends JavaPlugin {
 
@@ -28,17 +31,10 @@ public class Main extends JavaPlugin {
         instance = this;
         Bukkit.getLogger().log(Level.OFF, "Enabled");
         Countdowns.lobbycountdown();
-        Bukkit.getPluginManager().registerEvents(new MainListener(), this);
-        Bukkit.getPluginManager().registerEvents(new TNTTransfer(), this);
-        Bukkit.getPluginManager().registerEvents(new LaunchPad(), this);
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        Player p = (Player) sender;
-        if ((commandLabel.equalsIgnoreCase("stats")) || (commandLabel.equalsIgnoreCase("stat"))) {
-            p.sendMessage(gamename + "No stats.");
-        }
-        return false;
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new MainListener(), this);
+        pm.registerEvents(new TNTTransfer(), this);
+        pm.registerEvents(new LaunchPad(), this);
+        ShadyController.getThisServer().setStatus(SStatus.Join);
     }
 }

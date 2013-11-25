@@ -19,6 +19,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import uk.co.shadycast.shadycontroller.Objects.SStatus;
+import uk.co.shadycast.shadycontroller.ShadyController;
 
 public class Countdowns {
 
@@ -40,27 +42,28 @@ public class Countdowns {
         lobbytask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, new Runnable() {
             @Override
             public void run() {
-                Countdowns.lobbycountdown -= 1;
+                lobbycountdown -= 1;
                 Player[] players = Bukkit.getServer().getOnlinePlayers();
                 for (Player p : players) {
                     p.setFoodLevel(20);
                     int seconds = lobbycountdown;
                     ScoreboardManager.seconds.setScore(seconds);
                 }
-                if (Countdowns.lobbycountdown < 6) {
+                if (lobbycountdown < 6) {
                     for (Player p : players) {
                         p.playSound(p.getLocation(), Sound.CLICK, 20.0F, 0.0F);
                     }
          if (Main.playingplayers.size() < 3){
-              Bukkit.getScheduler().cancelTask(Countdowns.lobbytask);
+              Bukkit.getScheduler().cancelTask(lobbytask);
               Bukkit.broadcastMessage(Main.gamename + "There was not enough people to start the game! Timer restarted!");
               lobbycountdown = 35;
-              Countdowns.lobbycountdown();
+              lobbycountdown();
           }
                 }
-                if (Countdowns.lobbycountdown == 0) {
-                    Countdowns.gamecountdown();
-                    Bukkit.getScheduler().cancelTask(Countdowns.lobbytask);
+                if (lobbycountdown == 0) {
+                    ShadyController.getThisServer().setStatus(SStatus.InGame);
+                    gamecountdown();
+                    Bukkit.getScheduler().cancelTask(lobbytask);
                 }
             }
         }, 0L, 20L);
@@ -82,22 +85,22 @@ public class Countdowns {
         gametask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.instance, new Runnable() {
             @Override
             public void run() {
-                Countdowns.gamecountdown -= 1;
+                gamecountdown -= 1;
                 int seconds = gamecountdown;
                 ScoreboardManager.seconds.setScore(seconds);
                 ScoreboardManager.seconds.getScoreboard().resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Lobby Timer:"));
                 Player[] players = Bukkit.getServer().getOnlinePlayers();
-                Bukkit.broadcastMessage(Main.gamename + " " + Countdowns.gamecountdown + " seconds left.");
+                Bukkit.broadcastMessage(Main.gamename + " " + gamecountdown + " seconds left.");
                 for (Player p : players) {
                     //  p.setFoodLevel(20);
                     p.playSound(p.getLocation(), Sound.ORB_PICKUP, 0.0F, 20.0F);
                 }
-                if (Countdowns.gamecountdown == 0) {
+                if (gamecountdown == 0) {
                     Random r = new Random();
                     String TNTStartername = Main.playingplayers.get(r.nextInt(Main.playingplayers.size()));
                     Player TNTStarter = Bukkit.getPlayer(TNTStartername);
-                    Countdowns.TNTName = TNTStarter.getName();
-                    Main.TNTHolder.add(Countdowns.TNTName);
+                    TNTName = TNTStarter.getName();
+                    Main.TNTHolder.add(TNTName);
                     ItemStack TNT = new ItemStack(Material.TNT, 1);
                     ItemStack Headtnt = new ItemStack(Material.TNT, 1);
                     ItemMeta tntmeta = Headtnt.getItemMeta();
@@ -107,10 +110,10 @@ public class Countdowns {
                     TNTStarter.getInventory().setHelmet(Headtnt);
                     TNTStarter.getInventory().setItem(0, TNT);
                     TNTStarter.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
-                    Bukkit.getScheduler().cancelTask(Countdowns.gametask);
-                    Bukkit.broadcastMessage(Main.gamename + ChatColor.GOLD + " " + Countdowns.TNTName + ChatColor.AQUA + " has the tnt first! Run!");
-                    Countdowns.gamecountdown = 0;
-                    Countdowns.explosioncountdown();
+                    Bukkit.getScheduler().cancelTask(gametask);
+                    Bukkit.broadcastMessage(Main.gamename + ChatColor.GOLD + " " + TNTName + ChatColor.AQUA + " has the tnt first! Run!");
+                    gamecountdown = 0;
+                    explosioncountdown();
                 }
             }
         }, 0L, 20L);
@@ -123,13 +126,13 @@ public class Countdowns {
                 String TNTPlayername = Main.TNTHolder.get(0);
                 Player e = Bukkit.getPlayer(TNTPlayername);
                 String ename = e.getName();
-                Countdowns.explosioncountdowntimer -= 1;
+                explosioncountdowntimer -= 1;
                 Player[] players = Bukkit.getServer().getOnlinePlayers();
                 for (Player p : players) {
                     p.setFoodLevel(20);
                     ScoreboardManager.explosioncountdown.setScore(explosioncountdowntimer);
                 }
-                if (Countdowns.explosioncountdowntimer == 0) {
+                if (explosioncountdowntimer == 0) {
                     Main.playingplayers.remove(ename);
                     Main.DeadPlayers.add(ename);
                     Main.playingplayers.remove(ename);
@@ -231,13 +234,13 @@ public class Countdowns {
                     ///////////////////////////////////////////////////////////////////////////////////////////////
                     Bukkit.broadcastMessage(Main.gamename + " The new potato is " + ChatColor.GOLD + TNTHoldername + " run away!");
                     TNTHolder.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
-                    Bukkit.getScheduler().cancelTask(Countdowns.explosionname);
+                    Bukkit.getScheduler().cancelTask(explosionname);
                     ScoreboardManager.maxplayers.setScore(Main.playingplayers.size());
-                    Countdowns.explosioncountdowntimer = 46;
-                    Countdowns.explosioncountdown();
+                    explosioncountdowntimer = 46;
+                    explosioncountdown();
                     if (Main.playingplayers.size() == 1) {
                         for (Player other : Bukkit.getOnlinePlayers()) {
-                            Countdowns.showAll(other);
+                            showAll(other);
                         }
                         String winnername = Main.TNTHolder.get(0);
                         Player winner = Bukkit.getPlayer(winnername);
@@ -247,10 +250,11 @@ public class Countdowns {
                         Bukkit.broadcastMessage(Main.gamename + " The game has finished " + winnername + " has won!");
                         Bukkit.getScheduler().cancelAllTasks();
                         Bukkit.broadcastMessage(Main.gamename + " The server will restart in 5 seconds!");
+                        ShadyController.getThisServer().setStatus(SStatus.Restarting);
                         Bukkit.getScheduler().runTaskLater((Main.instance), new Runnable() {
                             @Override
                             public void run() {
-                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "restart");
+                                Bukkit.shutdown();
                             }
                         }, 100);
 
