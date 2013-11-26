@@ -53,13 +53,7 @@ public class MainListener
         ////////////////////////////////////////////////////////////////////////
         p.setGameMode(GameMode.ADVENTURE);
         if (Countdowns.lobbycountdown == 0) {
-            e.setJoinMessage(null);
-            p.sendMessage(Main.gamename + " game has started, so you can spectate!");
-            p.setGameMode(GameMode.CREATIVE);
-            Main.playingplayers.remove(pname);
-            for (Player hide : Bukkit.getOnlinePlayers()) {
-                hide.hidePlayer(p);
-            }
+                //You need to add the kick back to hub or wqhatever you want for spectator
         } else if (Countdowns.lobbycountdown > 0) {
             e.setJoinMessage(Main.gamename + " " + pname + " has joined the game");
         }
@@ -159,8 +153,4 @@ public class MainListener
         e.setCancelled(true);
     }
 
-    @EventHandler
-    public void onPing(ServerListPingEvent event) {
-        event.setMotd(ChatColor.RED + "HotPotato UK-1" + ChatColor.RESET + ChatColor.GREEN + "                                           <<-- Join for Hot Potato!");
-    }
 }
